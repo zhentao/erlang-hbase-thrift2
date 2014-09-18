@@ -9,26 +9,25 @@
 
 %% performs multiple mutations atomically on a single row
 mutateRow(Host, Port) -> 
-	{ok, Client} = thrift_client_util:new(Host, Port, tHBaseService_thrift, []),
-	{_C1, _Result} = thrift_client:call(Client, mutateRow, 
-			["ups",  #tRowMutations{row="zhentao-key1", 
-					mutations=[#tMutation{
-									put=#tPut{row="zhentao-key1", 
-									columnValues=[#tColumnValue{family="ui", qualifier="test", value="xyz"}]}},
-							   #tMutation{
-									put=#tPut{row="zhentao-key1", 
-									columnValues=[#tColumnValue{family="ui", qualifier="test1", value="abc"}]}}
-							  ]}
-			]).
+    {ok, Client} = thrift_client_util:new(Host, Port, tHBaseService_thrift, []),
+    {_C1, _Result} = thrift_client:call(Client, mutateRow, 
+            ["ups",  #tRowMutations{row="zhentao-key1", 
+                          mutations=[
+                            #tMutation{put=#tPut{row="zhentao-key1", columnValues=[#tColumnValue{family="ui", qualifier="test", value="xyz"}]}},
+                             #tMutation{put=#tPut{row="zhentao-key1", columnValues=[#tColumnValue{family="ui", qualifier="test1", value="abc"}]}}
+                          ]}
+            ]).
 
 get(Host, Port) ->
-	{ok, Client} = thrift_client_util:new(Host, Port, tHBaseService_thrift, []),
-	thrift_client:call(Client, get, ["ups", #tGet{row="zhentao-key1"}]).
+    {ok, Client} = thrift_client_util:new(Host, Port, tHBaseService_thrift, []),
+    thrift_client:call(Client, get, ["ups", #tGet{row="zhentao-key1"}]).
 
 put(Host, Port) -> 
-	{ok, Client} = thrift_client_util:new(Host, Port, tHBaseService_thrift, []),
-	thrift_client:call(Client, put, ["ups", #tPut{row="zhentao-key1", 
-												columnValues=[#tColumnValue{family="ui", qualifier="test", value="xyz1"},
-															  #tColumnValue{family="ui", qualifier="test1", value="abc1"}]}
-									
-									]).
+    {ok, Client} = thrift_client_util:new(Host, Port, tHBaseService_thrift, []),
+    thrift_client:call(Client, put, ["ups", 
+                           #tPut{row="zhentao-key1", columnValues=
+                                             [#tColumnValue{family="ui", qualifier="test", value="xyz1"},
+                                              #tColumnValue{family="ui", qualifier="test1", value="abc1"}
+                                             ]
+                                }				
+                      ]).
